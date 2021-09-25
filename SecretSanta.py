@@ -236,14 +236,11 @@ async def ping(ctx):
 
 @bot.command()
 async def reload(ctx):
-	print('command triggered')
-	if admin(ctx):
-		print('admin')
+	if admin(ctx.author):
 		await ctx.send('Reloading...')
 		os.system('run.bat')
 		quit()
 	else:
-		print('not admin')
 		await ctx.send('You do not have permission to do that!')
 
 
