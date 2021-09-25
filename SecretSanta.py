@@ -16,7 +16,7 @@ intents = discord.Intents.default()
 # intents.guilds = True
 
 activity = discord.Game(name='NAME')
-prefix = '**'
+prefix = '%'
 
 bot = commands.Bot(command_prefix = prefix, intents=intents, activity=activity, status=discord.Status.idle, case_insensitive=True)
 bot.remove_command('help')
