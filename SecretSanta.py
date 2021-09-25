@@ -231,6 +231,23 @@ async def start(ctx):
 
 
 @bot.command()
+async def ping(ctx):
+	await ctx.send('Pong!')
+
+@bot.command()
+async def reload(ctx):
+	if admin(ctx):
+		await ctx.send('Reloading...')
+		os.system('run.bat')
+		quit()
+	else:
+		await ctx.send('You do not have permission to do that!')
+
+
+
+
+
+@bot.command()
 async def help(ctx):
 	embed = discord.Embed ( # Message
 		title='Help',
