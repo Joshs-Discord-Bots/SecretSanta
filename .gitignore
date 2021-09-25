@@ -1,3 +1,4 @@
 *.lnk
 *.txt
 test.py
+*.yaml
