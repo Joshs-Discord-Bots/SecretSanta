@@ -1,12 +1,8 @@
 # https://discord.com/developers/applications
-from asyncio.windows_events import NULL
-from warnings import WarningMessage
 import discord
 from discord.ext import commands
 import os
 from os import system
-from discord.ext.commands.core import has_permissions
-from discord.gateway import EventListener
 import yaml
 import random
 
