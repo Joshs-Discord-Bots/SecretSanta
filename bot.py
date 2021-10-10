@@ -6,6 +6,20 @@ from os import system
 # import random
 import json
 
+if not os.path.isfile('data/config.json'):
+	def_config = {
+		'token': '',
+		'intents': {'messages': False, 'members': False, 'guilds': False},
+		'prefix': '-',
+		'admins': []
+	}
+	with open('config.json', 'w') as outfile:
+		json.dump(def_config, outfile, indent=4)
+
+with open('config.json') as json_file:
+    config = json.load(json_file)
+
+
 intents = discord.Intents.default()
 # intents.messages = True
 # intents.members = True
@@ -21,7 +35,7 @@ bot.token = 'TOKEN'
 with open('token.txt') as f:
     bot.token = f.read()
 
-filename = 'data/nice_list.yaml'
+filename = 'data/nice_list.json'
 
 admins = [285311305253126145, 181862796164726784]
 
