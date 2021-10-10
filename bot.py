@@ -4,7 +4,8 @@ from discord.ext import commands
 import os
 from os import system
 import yaml
-import random
+# import random
+import json
 
 intents = discord.Intents.default()
 # intents.messages = True
@@ -21,7 +22,7 @@ bot.token = 'TOKEN'
 with open('token.txt') as f:
     bot.token = f.read()
 
-filename = 'nice_list.yaml'
+filename = 'data/nice_list.yaml'
 
 admins = [285311305253126145, 181862796164726784]
 
@@ -30,16 +31,20 @@ def admin(user):
 
 def read(readFilename):
 	try:
-		with open(readFilename) as f:
-			return yaml.load(f, Loader=yaml.FullLoader)
+		with open('config.json') as json_file:
+			return json.load(json_file)
+		# with open(readFilename) as f:
+			# return yaml.load(f, Loader=yaml.FullLoader)
 	except FileNotFoundError:
 		return None
 
 def write(data, writeFilename):
-	with open(writeFilename, 'w') as f:
-		print('workingdir:', os.getcwd())
-		data = yaml.dump(data, f)
+	with open('config.json', 'w') as outfile:
+		json.dump(data, outfile, indent=4)
 	return
+	# with open(writeFilename, 'w') as f:
+	# 	print('workingdir:', os.getcwd())
+	# 	data = yaml.dump(data, f)
 
 
 
