@@ -6,45 +6,9 @@ from os import system
 # import random
 import json
 
-if not os.path.isfile('data/config.json'):
-	def_config = {
-		'token': '',
-		'intents': {'messages': False, 'members': False, 'guilds': False},
-		'prefix': '-',
-		'admins': []
-	}
-	with open('config.json', 'w') as outfile:
-		json.dump(def_config, outfile, indent=4)
-
-with open('config.json') as json_file:
-    config = json.load(json_file)
-
-
-intents = discord.Intents.default()
-# intents.messages = True
-# intents.members = True
-# intents.guilds = True
-
-activity = discord.Game(name='NAME')
-prefix = '%'
-
-bot = commands.Bot(command_prefix = prefix, intents=intents, activity=activity, status=discord.Status.idle, case_insensitive=True)
-bot.remove_command('help')
-
-bot.token = 'TOKEN'
-with open('token.txt') as f:
-    bot.token = f.read()
-
-filename = 'data/nice_list.json'
-
-admins = [285311305253126145, 181862796164726784]
-
-def admin(user):
-	return user.id in admins or user.guild_permissions.administrator
-
 def read(readFilename):
 	try:
-		with open(filename) as json_file:
+		with open(readFilename) as json_file:
 			return json.load(json_file)
 		# with open(readFilename) as f:
 			# return yaml.load(f, Loader=yaml.FullLoader)
@@ -55,10 +19,37 @@ def write(data, writeFilename):
 	with open(writeFilename, 'w') as outfile:
 		json.dump(data, outfile, indent=4)
 	return
-	# with open(writeFilename, 'w') as f:
-	# 	print('workingdir:', os.getcwd())
-	# 	data = yaml.dump(data, f)
 
+if not os.path.isfile('config.json'):
+	def_config = {
+		'token': 'TOKEN',
+		'name': 'BOT NAME',
+		'intents': {'messages': False, 'members': False, 'guilds': False},
+		'prefix': '-',
+		'admins': []
+	}
+	write(def_config, 'config.json')
+
+config = read('config.json')
+
+intents = discord.Intents.default()
+intents.messages = config['intents']['messages']
+intents.members = config['intents']['members']
+intents.guilds = config['intents']['guilds']
+
+prefix = config['prefix']
+
+activity = discord.Game(name=f"{prefix}help")
+bot = commands.Bot(command_prefix = prefix, intents=intents, activity=activity, status=discord.Status.online, case_insensitive=True)
+bot.remove_command('help')
+
+bot.token = config['token']
+bot.admins = config['admins']
+
+filename = 'data/nice_list.json'
+
+def admin(user):
+	return user.id in bot.admins or user.guild_permissions.administrator
 
 
 system('cls')
