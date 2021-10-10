@@ -10,8 +10,6 @@ def read(readFilename):
 	try:
 		with open(readFilename) as json_file:
 			return json.load(json_file)
-		# with open(readFilename) as f:
-			# return yaml.load(f, Loader=yaml.FullLoader)
 	except FileNotFoundError:
 		return None
 
