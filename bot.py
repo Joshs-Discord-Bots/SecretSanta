@@ -3,7 +3,6 @@ import discord
 from discord.ext import commands
 import os
 from os import system
-import yaml
 # import random
 import json
 
@@ -31,7 +30,7 @@ def admin(user):
 
 def read(readFilename):
 	try:
-		with open('config.json') as json_file:
+		with open(filename) as json_file:
 			return json.load(json_file)
 		# with open(readFilename) as f:
 			# return yaml.load(f, Loader=yaml.FullLoader)
@@ -39,7 +38,7 @@ def read(readFilename):
 		return None
 
 def write(data, writeFilename):
-	with open('config.json', 'w') as outfile:
+	with open(writeFilename, 'w') as outfile:
 		json.dump(data, outfile, indent=4)
 	return
 	# with open(writeFilename, 'w') as f:
