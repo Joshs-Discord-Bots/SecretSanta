@@ -1,5 +1,7 @@
-*.lnk
+__pycache__
 *.txt
-test.py
-*.yaml
+*.lnk
 *.bat
+*.sh
+!run.bat
+!run.sh
