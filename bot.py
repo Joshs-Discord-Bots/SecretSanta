@@ -302,6 +302,14 @@ async def admins(ctx, action='list', user: discord.Member = None):
 	else:
 		await ctx.send(f'Usage: `{bot.command_prefix} admin add/remove <user>`')
 
+@bot.command()
+async def support(ctx):
+	embed = discord.Embed ( # Message
+		title='Bot Support Contact Info',
+		description='Hey! Problem with the bot? Want your own bot commissioned?\nSend me a friend request: Joshalot#1023',
+		colour=discord.Colour.orange()
+	)
+	await ctx.author.send(embed=embed)
 
 
 @bot.command()
@@ -344,6 +352,9 @@ async def help(ctx):
 	embed.add_field(name='admins remove <user>', value='Revoke user\'s access to admin commands\n(admin only)', inline=False)
 	
 	embed.add_field(name='setPrefix <char>', value='Change bot\'s prefix\n(admin only)', inline=False)
+
+	embed.add_field(name='support', value='DMs bot support contact info to you', inline=False)
+
 	await ctx.send(embed=embed)
 
 
