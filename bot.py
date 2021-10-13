@@ -4,6 +4,7 @@ import os
 from os import system
 import random
 import json
+import platform
 
 #region Init
 
@@ -309,10 +310,16 @@ async def ping(ctx):
 
 @bot.command()
 async def reload(ctx):
-	if admin(ctx.author):
+	if admin(ctx):
 		await ctx.send('Reloading...')
-		os.system('run.bat')
-		quit()
+		if platform.system() == 'Windows' and os.path.isfile('run.bat'):
+			os.system('run.bat')
+			quit()
+		elif os.path.isfile('run.sh'):
+			os.system('./run.sh')
+			quit()
+		else:
+			await ctx.send('An error has occured')
 	else:
 		await ctx.send('You do not have permission to do that!')
 
