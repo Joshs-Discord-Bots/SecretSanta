@@ -4,5 +4,7 @@ __pycache__
 *.bat
 *.sh
 *.json
+*.py
+!bot.py
 !run.bat
 !run.sh
