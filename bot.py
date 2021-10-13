@@ -1,9 +1,8 @@
-# https://discord.com/developers/applications
 import discord
 from discord.ext import commands
 import os
 from os import system
-# import random
+import random
 import json
 
 def read(readFilename):
@@ -68,12 +67,6 @@ async def on_command_error(ctx, error):
 		await ctx.send('You are not allowed to do that!')
 
 
-# @bot.event
-# async def on_error():
-# 	print()
-
-
-
 @bot.command()
 async def join(ctx, user: discord.Member = None):
 	if user != None:
@@ -96,6 +89,16 @@ async def join(ctx, user: discord.Member = None):
 		await ctx.send(f'{user.name} is already on the nice list!')
 	write(niceList, filename)
 
+@bot.command()
+async def prefix(ctx, char = None):
+	if not admin(ctx):
+		await ctx.send('You are not allowed to do that!')
+	elif char == None:
+		await ctx.send(f'Usage: `{prefix}prefix <char>`')
+		return
+	else:
+		config['prefix'] = char[0]
+		write(config, 'config.json')
 
 
 @bot.command()
@@ -229,8 +232,49 @@ async def start(ctx):
 		curr = await bot.fetch_user(shuffledList[i])
 		pair = await bot.fetch_user(shuffledList[(i+1) % len(shuffledList)])
 		# await ctx.send(f'{curr.name} -> {pair.name}')
-		await curr.send(f'Ho Ho Ho!\nYour secret santa recipient is {pair.name}!')
+		if pair.nick == None:
+			await curr.send(f'Ho Ho Ho!\nYour secret santa recipient is {pair.name}!')
+		else:
+			await curr.send(f'Ho Ho Ho!\nYour secret santa recipient is {pair.nick}! ({pair.name})')
 
+
+@bot.command()
+async def admins(ctx, action='list', user: discord.Member = None):
+	if action == 'list':
+		embed = discord.Embed (
+			title='Secret Santa Admins',
+			colour=discord.Colour.green()
+		)
+		list = ''
+		for userid in config['admins']:
+			user = await bot.fetch_user(userid)
+			list+=f'\n{user.name}'
+		embed.description = list
+		await ctx.send(embed=embed)
+		return
+	elif not admin(ctx):
+		await ctx.send('You do not have permission to do that!')
+		return
+	
+	if user == None:
+		user == ctx.author
+	
+	if action == 'add':
+		if user.id in config['admins']:
+			await ctx.send(f'"{user.name}" is already an admin!')
+		else:
+			config['admins'].append(user.id)
+			write(config, 'config.json')
+			await ctx.send(f'"{user.name}" is now an admin')
+	elif action == 'remove':
+		if user.id not in config['admins']:
+			await ctx.send(f'"{user.name}" is not an admin!')
+		else:
+			config['admins'].remove(user.id)
+			write(config, 'config.json')
+			await ctx.send(f'"{user.name}" is now an admin')
+	else:
+		await ctx.send(f'Usage: `{prefix}admin add/remove <user>`')
 
 
 @bot.command()
@@ -248,8 +292,6 @@ async def reload(ctx):
 
 
 
-
-
 @bot.command()
 async def help(ctx):
 	embed = discord.Embed ( # Message
@@ -264,6 +306,12 @@ async def help(ctx):
 	embed.add_field(name='shuffle', value='Shuffles the list and assigns each member with a random recipient\n(admin only)', inline=False)
 	embed.add_field(name='shuffle view', value='DMs you the current secret santa pairings\n(admin only)', inline=False)
 	embed.add_field(name='start', value='Starts the secret santa, DMing each member with their assigned recipient\n(admin only)', inline=False)
+	
+	embed.add_field(name='admins list', value='Lists users who have access to admin commands', inline=False)
+	embed.add_field(name='admins add <user>', value='Give user access to admin commands\n(admin only)', inline=False)
+	embed.add_field(name='admins remove <user>', value='Revoke user\'s access to admin commands\n(admin only)', inline=False)
+	
+	embed.add_field(name='prefix <char>', value='Change bot\'s prefix\n(admin only)', inline=False)
 	await ctx.send(embed=embed)
 
 
