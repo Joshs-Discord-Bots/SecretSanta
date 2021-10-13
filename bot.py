@@ -33,8 +33,8 @@ def convertDictionaryKeyFromStringToInteger(oldDict):
 if not os.path.isfile('config.json'):
 	def_config = {
 		'token': 'TOKEN',
-		'name': 'BOT NAME',
-		'intents': {'messages': False, 'members': False, 'guilds': False},
+		'name': 'SecretSantaSnek',
+		'intents': {'messages': True, 'members': True, 'guilds': True},
 		'prefix': '-',
 		'admins': []
 	}
@@ -87,7 +87,11 @@ async def join(ctx, user: discord.Member = None):
 			return
 	else:
 		user = ctx.author
-	
+
+	if user.bot:
+		await ctx.send('Bots can not be part of the secret santa!')
+		return
+
 	niceList = convertDictionaryKeyFromStringToInteger(read(filename))
 	if niceList == None:
 		niceList = {}
@@ -258,7 +262,6 @@ async def start(ctx):
 		else:
 			await curr.send(f'Ho Ho Ho!\nYour secret santa recipient is {pair.nick}! ({pair.name})')
 	await ctx.send('Messages sent! Ho ho ho')
-	
 
 @bot.command()
 async def admins(ctx, action='list', user: discord.Member = None):
