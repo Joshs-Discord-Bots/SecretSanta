@@ -21,6 +21,8 @@ def write(data, writeFilename):
 	return
 
 def convertDictionaryKeyFromStringToInteger(oldDict):
+	if oldDict == None:
+		return None
 	newDict = {}
 	for oldKey in oldDict:
 		if isinstance(oldKey, str):
@@ -56,7 +58,7 @@ bot.remove_command('help')
 bot.token = config['token']
 bot.admins = config['admins']
 
-filename = 'data/nice_list.json'
+filename = 'nice_list.json'
 
 def admin(user):
 	return user.id in bot.admins or user.guild_permissions.administrator
