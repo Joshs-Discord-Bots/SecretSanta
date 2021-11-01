@@ -74,7 +74,6 @@ async def on_ready():
 	system('cls')
 	print(f'{bot.user} has connected to Discord!')
 
-
 @bot.event
 async def on_command_error(ctx, error):
 	if isinstance(error, commands.MemberNotFound):
@@ -201,7 +200,7 @@ async def clear(ctx):
 	await ctx.send('The list has now been cleared!')
 
 @bot.command()
-async def shuffle(ctx, view = ''):
+async def shuffle(ctx, view = '', user: discord.Member = None):
 	if not admin(ctx.author):
 		await ctx.send('You are not allowed to do that!')
 		return
@@ -228,9 +227,12 @@ async def shuffle(ctx, view = ''):
 			curr = await bot.fetch_user(shuffledList[i])
 			pair = await bot.fetch_user(shuffledList[(i+1) % len(shuffledList)])
 			embed.add_field(name=curr.name, value=pair.name, inline=False)
-		await ctx.author.send(embed=embed)
+		
+		if user == None:
+			user = ctx.author
+		await user.send(embed=embed)
 	else:
-		await ctx.send(f'Usage: `{bot.command_prefix}shuffle [view]`')
+		await ctx.send(f'Usage: `{bot.command_prefix}shuffle [view] [user]`')
 
 @bot.command()
 async def start(ctx):
@@ -347,6 +349,7 @@ async def help(ctx):
 	embed.add_field(name='clear', value='Clears the current secret santa list\n(admin only)', inline=False)
 	embed.add_field(name='shuffle', value='Shuffles the list and assigns each member with a random recipient\n(admin only)', inline=False)
 	embed.add_field(name='shuffle view', value='DMs you the current secret santa pairings\n(admin only)', inline=False)
+	embed.add_field(name='shuffle view <user>', value='DMs a user the current secret santa pairings\n(admin only)', inline=False)
 	embed.add_field(name='start', value='Starts the secret santa, DMing each member with their assigned recipient\n(admin only)', inline=False)
 	
 	embed.add_field(name='admins list', value='Lists users who have access to admin commands', inline=False)
